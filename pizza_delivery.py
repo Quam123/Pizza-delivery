@@ -1,16 +1,16 @@
 """
-========================================================
-  Pizza Palace - Pizza Delivery Application
-  Course: Python Programming Project
-  Description: A menu-driven pizza ordering system that
-               allows customers to build orders, apply
-               discounts, and receive an itemized receipt.
-========================================================
+Pizza Palace - Pizza Delivery App
+Python Programming Project
+
+I built this as a simple ordering system where a customer can
+pick their pizza, add toppings, grab a drink, and check out.
+Nothing fancy -- just parallel lists, some input validation,
+and a printed receipt at the end.
 """
 
-# ─────────────────────────────────────────────
-#  MENU DATA  (Parallel lists)
-# ─────────────────────────────────────────────
+# --- menu data ---
+# I kept everything in parallel lists to match what we learned in class.
+# Each index lines up: name[0] goes with price[0], and so on.
 
 SIZE_NAMES   = ["Small (10\")", "Medium (12\")", "Large (14\")", "XL (16\")"]
 SIZE_PRICES  = [8.99,           11.99,            14.99,          17.99]
@@ -26,25 +26,23 @@ CRUST_PRICES = [0.00,          0.00,             1.00,          2.50]
 DRINK_NAMES  = ["Coke",  "Diet Coke", "Sprite", "Water", "Lemonade"]
 DRINK_PRICES = [1.99,     1.99,        1.99,     0.99,    2.49]
 
-TAX_RATE         = 0.08   # 8% tax
-DELIVERY_FEE     = 3.99
+TAX_RATE         = 0.08   # state tax is 8%
+DELIVERY_FEE     = 3.99   # flat delivery charge
 DISCOUNT_CODE    = "PIZZA10"
-DISCOUNT_PERCENT = 0.10   # 10% off
+DISCOUNT_PERCENT = 0.10   # PIZZA10 knocks 10% off the order
 
 
-# ─────────────────────────────────────────────
-#  HELPER FUNCTIONS
-# ─────────────────────────────────────────────
+# --- helper functions ---
 
 def print_header(title):
-    """Print a formatted section header."""
+    # just a quick way to make sections look cleaner in the terminal
     print("\n" + "=" * 50)
     print(f"  {title}")
     print("=" * 50)
 
 
 def print_menu(names, prices, title):
-    """Display a numbered menu with prices."""
+    # loops through both lists at the same index and prints each option
     print_header(title)
     for i in range(len(names)):
         print(f"  {i + 1}. {names[i]:<20} ${prices[i]:.2f}")
@@ -52,20 +50,21 @@ def print_menu(names, prices, title):
 
 
 def get_valid_int(prompt, low, high):
-    """Prompt user until a valid integer in [low, high] is entered."""
+    # keeps asking until the user gives a real number that's in range
+    # I used a try/except here to catch letters or symbols
     while True:
         try:
             value = int(input(prompt))
             if low <= value <= high:
                 return value
             else:
-                print(f"  Please enter a number between {low} and {high}.")
+                print(f"  Pick a number from {low} to {high}.")
         except ValueError:
-            print("  Invalid input. Please enter a number.")
+            print("  That didn't work -- please type a number.")
 
 
 def get_yes_no(prompt):
-    """Prompt user for a yes/no answer. Returns True for yes."""
+    # simple yes/no loop, accepts y, yes, n, no (not case-sensitive)
     while True:
         answer = input(prompt).strip().lower()
         if answer in ("y", "yes"):
@@ -73,15 +72,13 @@ def get_yes_no(prompt):
         elif answer in ("n", "no"):
             return False
         else:
-            print("  Please enter Y or N.")
+            print("  Just type Y or N.")
 
 
-# ─────────────────────────────────────────────
-#  ORDER FUNCTIONS
-# ─────────────────────────────────────────────
+# --- order functions ---
 
 def get_customer_info():
-    """Collect customer name, address, and phone number."""
+    # grab the basics -- name, address, phone
     print_header("Customer Information")
     name    = input("  Enter your name: ").strip()
     address = input("  Enter delivery address: ").strip()
@@ -90,24 +87,22 @@ def get_customer_info():
 
 
 def choose_size():
-    """Let the customer choose a pizza size. Returns (name, price)."""
+    # shows the size menu and returns what the customer picked
     print_menu(SIZE_NAMES, SIZE_PRICES, "Choose Your Size")
     choice = get_valid_int("  Enter size number: ", 1, len(SIZE_NAMES))
     return SIZE_NAMES[choice - 1], SIZE_PRICES[choice - 1]
 
 
 def choose_crust():
-    """Let the customer choose a crust type. Returns (name, price)."""
+    # same idea as choose_size, just for crust
     print_menu(CRUST_NAMES, CRUST_PRICES, "Choose Your Crust")
     choice = get_valid_int("  Enter crust number: ", 1, len(CRUST_NAMES))
     return CRUST_NAMES[choice - 1], CRUST_PRICES[choice - 1]
 
 
 def choose_toppings():
-    """
-    Let the customer choose multiple toppings.
-    Returns a list of (name, price) tuples.
-    """
+    # customer can pick as many toppings as they want, one at a time
+    # entering 0 means they're done
     print_menu(TOPPING_NAMES, TOPPING_PRICES, "Choose Your Toppings")
     selected = []
     print("  Enter topping numbers one at a time.")
@@ -120,19 +115,16 @@ def choose_toppings():
         name  = TOPPING_NAMES[choice - 1]
         price = TOPPING_PRICES[choice - 1]
         if (name, price) in selected:
-            print(f"  {name} is already added.")
+            print(f"  Already got {name} on there.")
         else:
             selected.append((name, price))
-            print(f"  ✓ {name} added.")
+            print(f"  Got it -- {name} added.")
 
     return selected
 
 
 def build_pizza():
-    """
-    Walk the customer through building one pizza.
-    Returns a pizza dictionary.
-    """
+    # walks through size, crust, toppings and bundles it all into a dict
     size_name,  size_price  = choose_size()
     crust_name, crust_price = choose_crust()
     toppings                = choose_toppings()
@@ -152,12 +144,9 @@ def build_pizza():
 
 
 def choose_drinks():
-    """
-    Let the customer add drinks to the order.
-    Returns a list of (name, price) tuples.
-    """
+    # optional -- customer can skip drinks entirely or add multiple
     drinks = []
-    if not get_yes_no("\n  Would you like to add drinks? (Y/N): "):
+    if not get_yes_no("\n  Want to add drinks? (Y/N): "):
         return drinks
 
     print_menu(DRINK_NAMES, DRINK_PRICES, "Choose Drinks")
@@ -169,34 +158,29 @@ def choose_drinks():
         if choice == 0:
             break
         drinks.append((DRINK_NAMES[choice - 1], DRINK_PRICES[choice - 1]))
-        print(f"  ✓ {DRINK_NAMES[choice - 1]} added.")
+        print(f"  Added {DRINK_NAMES[choice - 1]}.")
 
     return drinks
 
 
 def apply_discount(subtotal):
-    """
-    Ask the customer for a promo code.
-    Returns the discount amount (0.00 if code is invalid).
-    """
-    code = input("\n  Enter promo code (or press Enter to skip): ").strip().upper()
+    # checks if the promo code matches -- if not, no discount
+    code = input("\n  Got a promo code? (Enter to skip): ").strip().upper()
     if code == DISCOUNT_CODE:
         discount = round(subtotal * DISCOUNT_PERCENT, 2)
-        print(f"  ✓ Code accepted! You save ${discount:.2f}")
+        print(f"  Nice! That saves you ${discount:.2f}")
         return discount
     elif code != "":
-        print("  Invalid promo code.")
+        print("  Hmm, that code didn't match anything.")
     return 0.00
 
 
-# ─────────────────────────────────────────────
-#  RECEIPT
-# ─────────────────────────────────────────────
+# --- receipt ---
 
 def print_receipt(customer, pizzas, drinks, discount, order_type):
-    """Print a fully itemized receipt."""
+    # prints out the full order breakdown at the end
     name, address, phone = customer
-    print_header("Pizza Palace - Order Receipt")
+    print_header("Pizza Palace - Your Receipt")
     print(f"  Customer : {name}")
     print(f"  Phone    : {phone}")
     if order_type == "delivery":
@@ -206,7 +190,7 @@ def print_receipt(customer, pizzas, drinks, discount, order_type):
 
     subtotal = 0.00
 
-    # Pizzas
+    # list each pizza with its parts
     for i, pizza in enumerate(pizzas, 1):
         print(f"\n  Pizza #{i}")
         print(f"    Size  : {pizza['size']:<25} ${pizza['size_price']:.2f}")
@@ -218,14 +202,14 @@ def print_receipt(customer, pizzas, drinks, discount, order_type):
         print(f"    Pizza Subtotal:              ${pizza['total']:.2f}")
         subtotal += pizza["total"]
 
-    # Drinks
+    # drinks section (only shows up if they ordered any)
     if drinks:
         print("\n  Drinks:")
         for d_name, d_price in drinks:
             print(f"    - {d_name:<25} ${d_price:.2f}")
             subtotal += d_price
 
-    # Delivery fee
+    # delivery charge only applies if they chose delivery
     delivery_charge = DELIVERY_FEE if order_type == "delivery" else 0.00
     if order_type == "delivery":
         print(f"\n  Delivery Fee:                ${delivery_charge:.2f}")
@@ -233,7 +217,6 @@ def print_receipt(customer, pizzas, drinks, discount, order_type):
     print("-" * 50)
     print(f"  Subtotal:                    ${subtotal:.2f}")
 
-    # Discount
     if discount > 0:
         print(f"  Discount (10%):             -${discount:.2f}")
         subtotal -= discount
@@ -244,53 +227,47 @@ def print_receipt(customer, pizzas, drinks, discount, order_type):
     print(f"  Tax (8%):                    ${tax:.2f}")
     print(f"  TOTAL:                       ${total:.2f}")
     print("=" * 50)
-    print("  Thank you for ordering from Pizza Palace!")
-    print("  Estimated delivery time: 30-45 minutes")
+    print("  Thanks for ordering from Pizza Palace!")
+    print("  Should be there in about 30-45 minutes.")
     print("=" * 50)
 
 
-# ─────────────────────────────────────────────
-#  MAIN PROGRAM
-# ─────────────────────────────────────────────
+# --- main ---
 
 def main():
-    """Main entry point — runs the full ordering workflow."""
     print_header("Welcome to Pizza Palace!")
-    print("  Your neighborhood pizza delivery experts.")
+    print("  Hot pizza, fast delivery -- let's get your order going.")
 
-    # Customer info
+    # step 1: customer info
     customer = get_customer_info()
 
-    # Delivery or pickup
-    print_header("Order Type")
+    # step 2: delivery or pickup?
+    print_header("How do you want your order?")
     print("  1. Delivery")
     print("  2. Pickup")
     order_choice = get_valid_int("  Enter choice: ", 1, 2)
     order_type   = "delivery" if order_choice == 1 else "pickup"
 
-    # Build pizzas
+    # step 3: build the pizzas
     pizzas = []
     while True:
         print_header(f"Building Pizza #{len(pizzas) + 1}")
         pizzas.append(build_pizza())
-        print(f"\n  ✓ Pizza #{len(pizzas)} added to your order!")
-        if not get_yes_no("  Add another pizza? (Y/N): "):
+        print(f"\n  Pizza #{len(pizzas)} is in the order!")
+        if not get_yes_no("  Want to add another pizza? (Y/N): "):
             break
 
-    # Drinks
+    # step 4: drinks
     drinks = choose_drinks()
 
-    # Discount
+    # step 5: promo code
     pizza_subtotal = sum(p["total"] for p in pizzas)
     drink_subtotal = sum(price for _, price in drinks)
     discount = apply_discount(pizza_subtotal + drink_subtotal)
 
-    # Receipt
+    # step 6: print the receipt
     print_receipt(customer, pizzas, drinks, discount, order_type)
 
 
-# ─────────────────────────────────────────────
-#  RUN
-# ─────────────────────────────────────────────
 if __name__ == "__main__":
     main()

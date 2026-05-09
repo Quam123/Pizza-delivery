@@ -1,103 +1,111 @@
 # Pizza Palace – Test Cases & Results
-**Project:** Python Pizza Delivery Application  
-**Tester Role:** Test Lead  
-**Total Test Cases:** 8  
+**Project:** Python Pizza Delivery Application
+**Role:** Test Lead
+**Tests Run:** 8
 
 ---
 
-## Test Case 1 – Valid Delivery Order (Basic)
+## TC-001 – Basic Delivery Order
+
 | Field | Details |
 |---|---|
 | **Test ID** | TC-001 |
-| **Description** | Place a single delivery order with one pizza, no drinks, no promo code |
-| **Inputs** | Name: John Doe / Address: 100 Main St / Phone: 555-0001 / Order: Delivery / Size: Small / Crust: Thin / Topping: Pepperoni / No more pizzas / No drinks / No promo code |
-| **Expected Output** | Subtotal: $10.49, Delivery Fee: $3.99, Tax: $1.16, **Total: $15.64** |
-| **Actual Output** | Total: $15.64 ✅ |
-| **Result** | **PASS** |
+| **What I was testing** | A straightforward delivery order with one pizza, no drinks, no promo |
+| **What I entered** | Name: John Doe / Address: 100 Main St / Phone: 555-0001 / Delivery / Small / Thin Crust / Pepperoni / Done with pizzas / No drinks / No promo |
+| **What I expected** | Subtotal $10.49, delivery fee $3.99, tax $1.16, total $15.64 |
+| **What I got** | Total: $15.64 ✅ |
+| **Result** | PASS |
 
 ---
 
-## Test Case 2 – Valid Pickup Order (No Delivery Fee)
+## TC-002 – Pickup Order (No Delivery Fee)
+
 | Field | Details |
 |---|---|
 | **Test ID** | TC-002 |
-| **Description** | Place a pickup order — no delivery fee should be applied |
-| **Inputs** | Name: Jane Smith / Address: N/A / Phone: 555-0002 / Order: Pickup / Size: Medium / Crust: Regular / No toppings / No drinks / No promo |
-| **Expected Output** | Delivery Fee: $0.00, Tax on $11.99, **Total: $12.95** |
-| **Actual Output** | Total: $12.95 ✅ |
-| **Result** | **PASS** |
+| **What I was testing** | Making sure pickup orders don't get charged the delivery fee |
+| **What I entered** | Name: Jane Smith / Pickup / Medium / Regular Crust / No toppings / No drinks / No promo |
+| **What I expected** | $0.00 delivery fee, tax on $11.99, total $12.95 |
+| **What I got** | Total: $12.95 ✅ |
+| **Result** | PASS |
 
 ---
 
-## Test Case 3 – Valid Promo Code (PIZZA10)
+## TC-003 – Promo Code PIZZA10 Works
+
 | Field | Details |
 |---|---|
 | **Test ID** | TC-003 |
-| **Description** | Apply valid promo code PIZZA10 and verify 10% discount is applied |
-| **Inputs** | Name: Alex Lee / Size: Large / Crust: Thick / Toppings: Sausage, Bacon / No drinks / Promo: PIZZA10 |
-| **Expected Output** | Subtotal before discount: $19.99 / Discount: $2.00 / Delivery Fee: $3.99 / Tax: $1.76 / **Total: $23.74** |
-| **Actual Output** | Total: $23.74 ✅ |
-| **Result** | **PASS** |
+| **What I was testing** | Entering the valid code PIZZA10 and seeing if the 10% discount shows up |
+| **What I entered** | Name: Alex Lee / Large / Thick Crust / Sausage + Bacon / No drinks / Promo: PIZZA10 |
+| **What I expected** | Pre-discount subtotal $19.99, discount -$2.00, delivery $3.99, tax $1.76, total $23.74 |
+| **What I got** | Total: $23.74 ✅ |
+| **Result** | PASS |
 
 ---
 
-## Test Case 4 – Invalid Promo Code
+## TC-004 – Bad Promo Code Gets Rejected
+
 | Field | Details |
 |---|---|
 | **Test ID** | TC-004 |
-| **Description** | Enter an invalid promo code — no discount should be applied |
-| **Inputs** | Valid pizza order / Promo code: FREEPIZZA |
-| **Expected Output** | Message: "Invalid promo code." / No discount applied |
-| **Actual Output** | "Invalid promo code." printed / Full price charged ✅ |
-| **Result** | **PASS** |
+| **What I was testing** | Typing a fake promo code to make sure the app doesn't give a discount |
+| **What I entered** | Normal pizza order / Promo code: FREEPIZZA |
+| **What I expected** | App says "Hmm, that code didn't match anything." and charges full price |
+| **What I got** | Error message shown, no discount applied ✅ |
+| **Result** | PASS |
 
 ---
 
-## Test Case 5 – Multiple Pizzas in One Order
+## TC-005 – Two Pizzas in One Order
+
 | Field | Details |
 |---|---|
 | **Test ID** | TC-005 |
-| **Description** | Order two pizzas and verify both are itemized on the receipt |
-| **Inputs** | Pizza 1: Small, Thin, Pepperoni / Pizza 2: XL, Stuffed Crust, Extra Cheese + Mushrooms / Add another pizza: Y (after pizza 1) |
-| **Expected Output** | Receipt shows Pizza #1 and Pizza #2 with separate subtotals |
-| **Actual Output** | Both pizzas displayed correctly on receipt ✅ |
-| **Result** | **PASS** |
+| **What I was testing** | Ordering two separate pizzas and checking they both show on the receipt |
+| **What I entered** | Pizza 1: Small, Thin, Pepperoni / Said "Y" to add another / Pizza 2: XL, Stuffed Crust, Extra Cheese + Mushrooms |
+| **What I expected** | Receipt shows Pizza #1 and Pizza #2 with their own subtotals |
+| **What I got** | Both pizzas printed correctly on the receipt ✅ |
+| **Result** | PASS |
 
 ---
 
-## Test Case 6 – Add Drinks to Order
+## TC-006 – Adding Drinks
+
 | Field | Details |
 |---|---|
 | **Test ID** | TC-006 |
-| **Description** | Add two drinks and verify prices are included in the total |
-| **Inputs** | Pizza: Medium / Regular / No toppings / Add drinks: Y / Coke + Lemonade |
-| **Expected Output** | Drinks listed: Coke $1.99, Lemonade $2.49 / Included in subtotal |
-| **Actual Output** | Both drinks itemized, total updated correctly ✅ |
-| **Result** | **PASS** |
+| **What I was testing** | Adding two drinks and making sure they show up in the total |
+| **What I entered** | Medium pizza / Regular crust / No toppings / Yes to drinks / Coke + Lemonade |
+| **What I expected** | Coke $1.99 and Lemonade $2.49 both listed, totals correct |
+| **What I got** | Both drinks on the receipt, math checked out ✅ |
+| **Result** | PASS |
 
 ---
 
-## Test Case 7 – Invalid Menu Input (Letters Instead of Numbers)
+## TC-007 – Typing Letters at a Number Prompt
+
 | Field | Details |
 |---|---|
 | **Test ID** | TC-007 |
-| **Description** | Enter a letter when a number is expected — program should re-prompt |
-| **Inputs** | At size prompt, enter: "abc" then "2" |
-| **Expected Output** | Message: "Invalid input. Please enter a number." / Re-prompts for input |
-| **Actual Output** | Error message shown, re-prompted successfully ✅ |
-| **Result** | **PASS** |
+| **What I was testing** | What happens if someone types letters when the app wants a number |
+| **What I entered** | Typed "abc" at the size prompt, then "2" |
+| **What I expected** | App says "That didn't work -- please type a number." and asks again |
+| **What I got** | Error message came up, re-prompted, accepted "2" fine ✅ |
+| **Result** | PASS |
 
 ---
 
-## Test Case 8 – Out-of-Range Menu Input
+## TC-008 – Number Out of Range
+
 | Field | Details |
 |---|---|
 | **Test ID** | TC-008 |
-| **Description** | Enter a number outside valid range — program should re-prompt |
-| **Inputs** | At size prompt, enter: "9" then "3" |
-| **Expected Output** | Message: "Please enter a number between 1 and 4." / Re-prompts |
-| **Actual Output** | Error message shown, re-prompted, Large pizza selected ✅ |
-| **Result** | **PASS** |
+| **What I was testing** | Entering a number that's too high for the menu options |
+| **What I entered** | Typed "9" at the size prompt (only 4 options), then "3" |
+| **What I expected** | App says "Pick a number from 1 to 4." and asks again |
+| **What I got** | Range error shown, re-prompted, Large pizza selected on "3" ✅ |
+| **Result** | PASS |
 
 ---
 
@@ -107,4 +115,4 @@
 |---|---|---|---|
 | 8 | **8** | 0 | **100%** |
 
-All test cases passed. The application correctly handles valid inputs, invalid inputs, promo codes, multiple pizzas, drink additions, delivery vs. pickup pricing, and tax calculations.
+Everything passed. The app handled good inputs, bad inputs, promo codes, multiple pizzas, drinks, delivery vs. pickup pricing, and the tax math without any issues.
